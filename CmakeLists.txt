@@ -8,15 +8,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_subdirectory(googletest-1.15.2)
 
 set(CreationPatterns ${CMAKE_CURRENT_SOURCE_DIR}/CreationalPatterns)
+set(StructuralPatterns ${CMAKE_CURRENT_SOURCE_DIR}/StructuralPatterns)
+
 set(TEST_SOURCES)
-
-
-file(GLOB TEST_SOURCES ${CreationPatterns}/*.hpp)
+file(GLOB TEST_SOURCES ${CreationPatterns}/*.hpp ${StructuralPatterns}/*.hpp)
 
 foreach(TEST_SOURCE ${TEST_SOURCES})
     # 获取测试源文件的文件名（不含路径和扩展名）
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
-    add_executable(${TEST_NAME} ${CreationPatterns}/${TEST_NAME}.hpp ${CreationPatterns}/Test/${TEST_NAME}_unittest.cpp)
+    get_filename_component(TEST_PATH ${TEST_SOURCE} DIRECTORY)
+    add_executable(${TEST_NAME} ${TEST_SOURCE} ${TEST_PATH}/TEST/${TEST_NAME}_unittest.cpp)
     target_link_libraries(${TEST_NAME} gtest_main)
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 endforeach()
